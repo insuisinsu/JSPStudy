@@ -20,7 +20,7 @@
 	Boolean connect = false;		// 접속이 잘 되는지 확인하는 변수
 
 	try {
-		Class.forName (driver);		// 오라클 드라이버 로드함
+		Class.forName (driver);		// MSSQL 드라이버 로드함
 		conn = DriverManager.getConnection (url, "sa" , "1234");
 		
 		connect = true;
