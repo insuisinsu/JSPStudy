@@ -37,7 +37,7 @@
 			
 			if(passwd.equals(rPass)){
 				sql = "delete mbTbl where id = ?";
-				pstmt = conn.prepareStatment(sql);
+				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1,id);
 				pstmt.executeUpdate();
 				
@@ -47,7 +47,7 @@
 			}
 			
 		}else{
-			out.println("해당 id 가 존재하지 않습니다.")
+			out.println("해당 id 가 존재하지 않습니다.");
 		}
 		
 		out.println(sql);

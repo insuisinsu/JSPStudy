@@ -44,7 +44,7 @@
 			}
 			
 		}else{
-			out.println("해당 id 가 존재하지 않습니다.")
+			out.println("해당 id 가 존재하지 않습니다.");
 		}
 		
 		out.println(sql);
