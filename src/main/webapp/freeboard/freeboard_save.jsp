@@ -21,7 +21,7 @@
 	int id = 1;		// DB의 id 컬럼에 저장할 값
 	int pos = 0;
 	if(cont.length() == 1){
-		cont = cont + ""; 
+		cont = cont + " "; 
 	}
 	
 	//content(Text Area)의 엔터를 처리해 줘야 함 - Oracle DB에 저장할때
