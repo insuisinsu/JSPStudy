@@ -5,8 +5,8 @@
 <HEAD>
 <SCRIPT language="javascript">
 function check() {
- with(document.msgwrite){
-  if(subject.value.length == 0){
+ with(document.msgwrite){			// document : 문서 전체, msgwrite : Form
+  if(subject.value.length == 0){	// document.msgwrite.subject.value.length .. 아래 Form 의 값
    alert("제목을 입력해 주세요!!");
    subject.focus();
    return false;
@@ -88,6 +88,8 @@ function check() {
   <tr> 
    <td width="124" height="162" align="center" valign="top" bgcolor="#f4f4f4" style="padding-top:7;">내 용</td>
    <td width="494" valign="top"  style="padding:5 0 5 10"> 
+   
+   <!-- textarea 는 value 가 아니라 내용에다 그냥 찍으면 됨 -->
     <textarea name=content cols="65" rows="10" class="textarea_style1"><%=rs.getString("content")%> </textarea>
    </td>
   </tr>

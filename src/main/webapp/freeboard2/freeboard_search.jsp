@@ -113,6 +113,7 @@
  int endpage=startpage+maxpages-1;
  int wheregroup=1;
  
+ //페이징 처리
  if (request.getParameter("go") != null) {
   where = Integer.parseInt(request.getParameter("go"));
   wheregroup = (where-1)/maxpages + 1;
@@ -145,8 +146,9 @@
 
  try {
   st = conn.createStatement();
+  // cond = " where name like '%"+ val+ "%'"
   String sql = "select * from freeboard " + cond;
-  sql = sql + " order by id desc" ;
+  sql += " order by id desc" ;
   rs = st.executeQuery(sql);
   if (!(rs.next()))  {
    out.println("해당하는 글이 없습니다");

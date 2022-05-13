@@ -19,6 +19,10 @@
 
  if (cont.length()==1) 
   cont = cont+" " ;
+ 
+ // testarea 내에 ' 가 들어가면 DB 에 Insert, Update 시 문제 발생
+ 
+ 
   while ((pos=cont.indexOf("\'", pos)) != -1) {
    String left=cont.substring(0, pos);
    String right=cont.substring(pos, cont.length());

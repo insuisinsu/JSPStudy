@@ -270,7 +270,10 @@
   </TR>
  </TABLE>-->
 
+
+<!--  검색창  -->
 <FORM method="post" name="msgsearch" action="freeboard_search.jsp">
+<!--  option 으로 고른 value 값과 input 에 넣은 sval 값이 넘어감 -->
 <TABLE border=0 width=600 cellpadding=0 cellspacing=0>
  <TR>
   <TD align=right width="241"> 

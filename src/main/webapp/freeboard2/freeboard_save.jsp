@@ -16,13 +16,21 @@
  if (cont.length()==1) 
   cont = cont+" "  ;
 
+ // 본문에 입력한 ' 가 쿼리에 영향을 줌 // insert, update 할때
  while ((pos=cont.indexOf("\'", pos)) != -1) {
   String left=cont.substring(0, pos);
+  	out.println("pos : " + pos + "<p>");
+  	out.println("left : " + left + "<p>");
+  
   String right=cont.substring(pos, cont.length());
+  	out.println("pos : " + pos + "<p>");
+  	out.println("right : " + right + "<p>");
+  	
   cont = left + "\'" + right;
   pos += 2;
  }
-
+ 
+ 
 // out.println (pos);
 // out.println (cont.length());
 // if (true) return;
@@ -78,3 +86,13 @@ if (cnt >0)
 %>
 
 <jsp:forward page ="freeboard_list.jsp" />   
+
+<!--
+jsp:forward				: 서버단에서 페이지를 이동 , client 의 기존 url 정보가 바뀌지 않음
+						- 그래서 게시글 저장하고 list 로 와도 url 은 save 로 되어있음
+response.sendRedirect	: 클라이언트에서 페이지를 재요청하여 페이지 이동함 , client 의 url 정보가 바뀜
+ 						- freeboard_rsave.jsp 에는 이걸로 되어있음
+ -->
+
+
+
