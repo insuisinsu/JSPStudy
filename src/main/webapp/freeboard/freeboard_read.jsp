@@ -1,132 +1,124 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.*, java.util.*, java.text.*" %>
-<% request.setCharacterEncoding("UTF-8"); %>	<!--  í•œê¸€ ì²˜ë¦¬ -->
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+    
+<%@ page import="java.sql.*,java.util.*,java.text.*" %> 
+<% request.setCharacterEncoding("EUC-KR"); %>
 <%@ include file = "dbconn_oracle.jsp" %>
+
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>ì»¬ëŸ¼ì˜ íŠ¹ì • ë ˆì½”ë“œë¥¼ ì½ëŠ” í˜ì´ì§€</title>
+<meta charset="EUC-KR">
+<title>ÄÃ·³ÀÇ Æ¯Á¤ ·¹ÄÚµå¸¦ ÀĞ´Â ÆäÀÌÁö </title>
 </head>
 <body>
 
+
 <%
-	String sql = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;
+	String sql = null; 
+	PreparedStatement pstmt = null; 
+	ResultSet rs = null; 
 	
-	//id ë¥¼ ë°›ì•„ì„œ int í˜•ì‹ìœ¼ë¡œ ë³€í™˜
-	int id = Integer.parseInt(request.getParameter("id"));	
+	int id = Integer.parseInt(request.getParameter("id"));
+	//String name = request.getParameter("name");
+	//String email = request.getParameter("email"); 
 	
-	/*
-	get ë°©ì‹ìœ¼ë¡œ í™•ì¸
-	String name = request.getParameter("name");
-	String email = request.getParameter("email");
+	//out.println (id + "<p>");
+	//out.println (name + "<p>");
+	// out.println (email); 
 	
-	out.println(id + "<p>");
-	out.println(name + "<p>");
-	out.println(email);
-	if(true) return;	// í”„ë¡œê·¸ë¨ì„ ì—¬ê¸°ì„œ ë©ˆì¶¤. (ë””ë²„ê¹… ì‹œì— ë§ì´ ì‚¬ìš©)
-	*/
+	// if (true) return;    // ÇÁ·Î±×·¥À» ¿©±â¼­ ¸ØÃã. (µğ¹ö±ë ½Ã¿¡ ¸¹ÀÌ »ç¿ë. )
 	
 	try {
-		sql = "select * from freeboard where id = ?";
-		pstmt = conn.prepareStatement(sql);
-		pstmt.setInt(1, id);
-		rs = pstmt.executeQuery();
+		sql = "select * from freeboard where id = ? "; 
+		pstmt = conn.prepareStatement(sql); 
+		pstmt.setInt(1, id); 
+		rs = pstmt.executeQuery(); 
 		
-		if(!(rs.next())){	// DB ì— ê°’ì´ ì—†ëŠ” ê²½ìš°
-			out.println("DBì— í•´ë‹¹ ë‚´ìš©ì´ ì—†ìŠµë‹ˆë‹¤.");
-		}else{		// DB ì— ê°’ì´ ì¡´ì¬í•˜ëŠ” ê²½ìš°, rs ì˜ ê°’ë“¤ì„ í™”ë©´ì— ì¶œë ¥
-			//out.println("DBì— ê°’ì´ ì¡´ì¬í•©ë‹ˆë‹¤.");
-			String em = rs.getString("email");
-			//DBì˜ email ì»¬ëŸ¼ì˜ ê°’ì´ null ë„ ì•„ë‹ˆê³  ê³µë°±ë„ ì•„ë‹ˆë¼ë©´ /?? ë„ì–´ì“°ê¸°ëŠ” êµ¬ë¶„ ëª»í•¨?
-			if((em != null) && !(em.equals(""))){
-				em = "<A href = mailto:" + em + ">" + rs.getString("name") + "</A>";
-			}else{	// ë©”ì¼ ì£¼ì†Œì˜ ê°’ì´ ë¹„ì–´ìˆì„ë•Œ ì´ë¦„ë§Œ ì¶œë ¥
-				em = rs.getString("name");
+		if ( !(rs.next())){   // °ªÀÌ Á¸ÀçÇÏÁö ¾Ê´Â °æ¿ì
+			out.println ("µ¥ÀÌÅ¸º£ÀÌ½º¿¡ ÇØ´ç ³»¿ëÀÌ ¾ø½À´Ï´Ù. "); 
+		}else {				//°ªÀÌ Á¸ÀçÇÏ´Â °æ¿ì , rs ÀÇ °ªµéÀ» È­¸é¿¡ Ãâ·Â 
+			// out.println ("µ¥ÀÌÅ¸ º£ÀÌ½º¿¡ °ªÀÌ Á¸Àç ÇÕ´Ï´Ù. "); 
+			String em = rs.getString("email"); 
+			if ((em !=null) && (!(em.equals("")))){   // DBÀÇ email ÄÃ·³ÀÇ °ªÀÌ Á¸ÀçÇÏ¸é
+				em = "<A href = mailto:" + em + ">" + rs.getString("name") + "</A>" ; 
+			}else {  //¸ŞÀÏ ÁÖ¼ÒÀÇ °ªÀÌ ºñ¾îÀÖÀ»¶§ ÀÌ¸§¸¸ Ãâ·Â
+				em = rs.getString("name"); 
 			}
-//			out.println(em);
-
-			// ì„œë¸”ë¦¿ìœ¼ë¡œ ì¶œë ¥
-			// ì„œë¸”ë¦¿ : JAVA ì—ì„œ ì›¹í˜ì´ì§€ë¥¼ ì¶œë ¥í•  ìˆ˜ ìˆëŠ” JAVA í˜ì´ì§€
-			out.println("<table width='600' cellspacing='0' cellpadding='2' align='center'>");
-			out.println("<tr>");
-			out.println("<td height='22'>&nbsp;</td></tr>");
-			out.println("<tr align='center'>");
-			out.println("<td height='1' bgcolor='#1F4F8F'></td>");
-			out.println("</tr>");
-			out.println("<tr align='center' bgcolor='#DFEDFF'>");
-			out.println("<td class='button' bgcolor='#DFEDFF'>"); 
-			out.println("<div align='left'><font size='2'>"+rs.getString("subject") + "</div> </td>");
-			out.println("</tr>");
-			out.println("<tr align='center' bgcolor='#FFFFFF'>");
-			out.println("<td align='center' bgcolor='#F4F4F4'>"); 
-			out.println("<table width='100%' border='0' cellpadding='0' cellspacing='4' height='1'>");
-			out.println("<tr bgcolor='#F4F4F4'>");
-			out.println("<td width='13%' height='7'></td>");
-			out.println("<td width='51%' height='7'>ê¸€ì“´ì´ : "+ em +"</td>");
-			out.println("<td width='25%' height='7'></td>");
-			out.println("<td width='11%' height='7'></td>");
-			out.println("</tr>");
-			out.println("<tr bgcolor='#F4F4F4'>");
-			out.println("<td width='13%'></td>");
-			out.println("<td width='51%'>ì‘ì„±ì¼ : " + rs.getString("inputdate") + "</td>");
-			out.println("<td width='25%'>ì¡°íšŒ : "+(rs.getInt("readcount")+1)+"</td>");
-			out.println("<td width='11%'></td>");
-			out.println("</tr>");
-			out.println("</table>");
-			out.println("</td>");
-			out.println("</tr>");
-			out.println("<tr align='center'>");
-			out.println("<td bgcolor='#1F4F8F' height='1'></td>");
-			out.println("</tr>");
-			out.println("<tr align='center'>");
-			out.println("<td style='padding:10 0 0 0'>");
-			out.println("<div align='left'><br>");
-			out.println("<font size='3' color='#333333'><PRE>"+rs.getString("content") + "</PRE></div>");
-			out.println("<br>");
-			out.println("</td>");
-			out.println("</tr>");
-			out.println("<tr align='center'>");
-			out.println("<td class='button' height='1'></td>");
-			out.println("</tr>");
-			out.println("<tr align='center'>");
-			out.println("<td bgcolor='#1F4F8F' height='1'></td>");
-			out.println("</tr>");
-			out.println("</table>");
 			
-			sql = "update freeboard set readcount= readcount + 1 where id= ?" ;
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, id);
-			pstmt.executeUpdate();
-		}
-//		if(true) return;
-		%>
+			// out.println (em); 
 		
-		<table width="600" border="0" cellpadding="0" cellspacing="5">
-		 <tr> 
-		  <td align="right" width="450"><A href="freeboard_list.jsp?go=<%=request.getParameter("page") %>"> 
-		    <img src="image/list.jpg" border=0></a></td>
-		<td width="70" align="right"><A href="freeboard_rwrite.jsp?id=<%= request.getParameter("id")%>&page=<%=request.getParameter("page")%>"> <img src="image/reply.jpg" border=0></A></td>
-		<td width="70" align="right"><A href="freeboard_upd.jsp?id=<%=id%>&page=1"><img src="image/edit.jpg" border=0></A></td>
-		<td width="70" align="right"><A href="freeboard_del.jsp?id=<%=id%>&page=1"><img src="image/del.jpg"  border=0></A></td>
-		 </tr>
-		</table>
+			//¼­ºí¸´À¸·Î Ãâ·Â , ¼­ºí¸´ : JAVA¿¡¼­ À¥ÆäÀÌÁö¸¦ Ãâ·Â ÇÒ¼ö ÀÖ´Â Java ÆäÀÌÁö
+			   out.println("<table width='600' cellspacing='0' cellpadding='2' align='center'>");
+			   out.println("<tr>");
+			   out.println("<td height='22'>&nbsp;</td></tr>");
+			   out.println("<tr align='center'>");
+			   out.println("<td height='1' bgcolor='#1F4F8F'></td>");
+			   out.println("</tr>");
+			   out.println("<tr align='center' bgcolor='#DFEDFF'>");
+			   out.println("<td class='button' bgcolor='#DFEDFF'>"); 
+			   out.println("<div align='left'><font size='2'>"+rs.getString("subject") + "</div> </td>");
+			   out.println("</tr>");
+			   out.println("<tr align='center' bgcolor='#FFFFFF'>");
+			   out.println("<td align='center' bgcolor='#F4F4F4'>"); 
+			   out.println("<table width='100%' border='0' cellpadding='0' cellspacing='4' height='1'>");
+			   out.println("<tr bgcolor='#F4F4F4'>");
+			   out.println("<td width='13%' height='7'></td>");
+			   out.println("<td width='51%' height='7'>±Û¾´ÀÌ : "+ em +"</td>");
+			   out.println("<td width='25%' height='7'></td>");
+			   out.println("<td width='11%' height='7'></td>");
+			   out.println("</tr>");
+			   out.println("<tr bgcolor='#F4F4F4'>");
+			   out.println("<td width='13%'></td>");
+			   out.println("<td width='51%'>ÀÛ¼ºÀÏ : " + rs.getString("inputdate") + "</td>");
+			   out.println("<td width='25%'>Á¶È¸ : "+(rs.getInt("readcount")+1)+"</td>");
+			   out.println("<td width='11%'></td>");
+			   out.println("</tr>");
+			   out.println("</table>");
+			   out.println("</td>");
+			   out.println("</tr>");
+			   out.println("<tr align='center'>");
+			   out.println("<td bgcolor='#1F4F8F' height='1'></td>");
+			   out.println("</tr>");
+			   out.println("<tr align='center'>");
+			   out.println("<td style='padding:10 0 0 0'>");
+			   out.println("<div align='left'><br>");
+			   out.println("<font size='3' color='#333333'><PRE>"+rs.getString("content") + "</PRE></div>");
+			   out.println("<br>");
+			   out.println("</td>");
+			   out.println("</tr>");
+			   out.println("<tr align='center'>");
+			   out.println("<td class='button' height='1'></td>");
+			   out.println("</tr>");
+			   out.println("<tr align='center'>");
+			   out.println("<td bgcolor='#1F4F8F' height='1'></td>");
+			   out.println("</tr>");
+			   out.println("</table>");
+			  %>
 		
-	<%
-	}catch(Exception ex){
-		out.println(ex.getMessage());
-	}finally{
-		if(rs != null)
-			rs.close();
-		if(pstmt != null)
-			pstmt.close();
-		if(conn != null)
-			conn.close();
-	}
-
+		  <table width="600" border="0" cellpadding="0" cellspacing="5">
+   <tr> 
+    <td align="right" width="450"><A href="freeboard_list.jsp?go=<%=request.getParameter("page") %>"> 
+     <img src="image/list.jpg" border=0></a></td>
+	<td width="70" align="right"><A href="freeboard_rwrite.jsp?id=<%= request.getParameter("id")%>&page=<%=request.getParameter("page")%>"> <img src="image/reply.jpg" border=0></A></td>
+	<td width="70" align="right"><A href="freeboard_upd.jsp?id=<%=id%>&page=1"><img src="image/edit.jpg" border=0></A></td>
+	<td width="70" align="right"><A href="freeboard_del.jsp?id=<%=id%>&page=1"><img src="image/del.jpg"  border=0></A></td>
+   </tr>
+  </table>
+  <%    
+   sql = "update freeboard set readcount= readcount + 1 where id= ?" ;
+   pstmt = conn.prepareStatement(sql);
+   pstmt.setInt(1, id);
+   pstmt.executeUpdate();
+   
+  }
+		
+  rs.close();
+  pstmt.close();
+  conn.close();
+ } catch (SQLException e) {
+  out.println(e);
+ } 
 %>
-</body>
-</html>
+</BODY>
+</HTML>

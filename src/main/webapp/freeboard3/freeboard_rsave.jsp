@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 
 <%@ page language="java" import="java.sql.*,java.util.*,java.text.*" %> 
-<% request.setCharacterEncoding("euc-kr"); %>
+<% request.setCharacterEncoding("UTF-8"); %>
 <%@ include file = "dbconn_oracle.jsp" %>
 
 <%

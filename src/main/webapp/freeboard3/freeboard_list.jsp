@@ -1,14 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
-<%@ page language="java" import="java.sql.*,java.util.*" %> 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import= "java.sql.*,java.util.*" %> 
 <HTML>
-<HEAD><TITLE>°Ô½ÃÆÇ</TITLE>
+<HEAD><TITLE>ê²Œì‹œíŒ</TITLE>
 <link href="freeboard.css" rel="stylesheet" type="text/css">
 <SCRIPT language="javascript">
  function check(){
   with(document.msgsearch){
    if(sval.value.length == 0){
-    alert("°Ë»ö¾î¸¦ ÀÔ·ÂÇØ ÁÖ¼¼¿ä!!");
+    alert("ê²€ìƒ‰ì–´ë¥¼ ì…ë ¥í•´ ì£¼ì„¸ìš”!!");
     sval.focus();
     return false;
    }	
@@ -33,7 +33,7 @@
 <BODY>
 <%@ include file = "dbconn_oracle.jsp" %>
 <P>
-<P align=center><FONT color=#0000ff face=±¼¸² size=3><STRONG>ÀÚÀ¯ °Ô½ÃÆÇ</STRONG></FONT></P> 
+<P align=center><FONT color=#0000ff face=êµ´ë¦¼ size=3><STRONG>ììœ  ê²Œì‹œíŒ</STRONG></FONT></P> 
 <P>
 <CENTER>
  <TABLE border=0 width=600 cellpadding=4 cellspacing=0>
@@ -41,18 +41,18 @@
    <td colspan="5" height="1" bgcolor="#1F4F8F"></td>
   </tr>
   <tr align="center" bgcolor="#87E8FF"> 
-   <td width="42" bgcolor="#DFEDFF"><font size="2">¹øÈ£</font></td>
-   <td width="340" bgcolor="#DFEDFF"><font size="2">Á¦¸ñ</font></td>
-   <td width="84" bgcolor="#DFEDFF"><font size="2">µî·ÏÀÚ</font></td>
-   <td width="78" bgcolor="#DFEDFF"><font size="2">³¯Â¥</font></td>
-   <td width="49" bgcolor="#DFEDFF"><font size="2">Á¶È¸</font></td>
+   <td width="42" bgcolor="#DFEDFF"><font size="2">ë²ˆí˜¸</font></td>
+   <td width="340" bgcolor="#DFEDFF"><font size="2">ì œëª©</font></td>
+   <td width="84" bgcolor="#DFEDFF"><font size="2">ë“±ë¡ì</font></td>
+   <td width="78" bgcolor="#DFEDFF"><font size="2">ë‚ ì§œ</font></td>
+   <td width="49" bgcolor="#DFEDFF"><font size="2">ì¡°íšŒ</font></td>
   </tr>
   <tr align="center"> 
    <td colspan="5" bgcolor="#1F4F8F" height="1"></td>
   </tr>
- <%   // Vector : ¸ÖÆ¼½º·¹µå È¯°æ¿¡¼­ »ç¿ë, ¸ğµç ¸Ş¼Òµå°¡ µ¿±âÈ­ Ã³¸®µÇ¾î ÀÖÀ½. 
- 
-  Vector name=new Vector();			// DBÀÇ Name °ª¸¸ ÀúÀåÇÏ´Â º¤ÅÍ
+  
+ <%		//vector : ë©€í‹°ìŠ¤ë ˆë“œ í™˜ê²½ì—ì„œ ì‚¬ìš©, ëª¨ë“  ë©”ì†Œë“œê°€ ë™ê¸°í™” ì²˜ë¦¬ë˜ì–´ ìˆìŒ 
+  Vector name=new Vector();
   Vector inputdate=new Vector();
   Vector email=new Vector();
   Vector subject=new Vector();
@@ -61,28 +61,21 @@
   Vector step=new Vector();
   Vector keyid=new Vector();
   
-  // ÆäÀÌÂ¡ Ã³¸® ½ÃÀÛ ºÎºĞ 
+  //í˜ì´ì§• ì²˜ë¦¬ ì‹œì‘ ë¶€ë¶„
   
   int where=1;
 
-  int totalgroup=0;					// Ãâ·ÂÇÒ ÆäÀÌÂ¡ÀÇ ±×·ìÇÎÀÇ ÃÖ´ë °¹¼ö
-  int maxpages=5;					// ÃÖ´ë ÆäÀÌÁö °¹¼ö ()
-  int startpage=1;					// ÆäÀÌÁö ±×·ìÀÇ ½ÃÀÛ ÆäÀÌÁö
-  int endpage=startpage+maxpages-1;	// ÆäÀÌÁö ±×·ìÀÇ ¸¶Áö¸· ÆäÀÌÁö
-  int wheregroup=1;					// ÇöÀç À§Ä¡ÇÏ´Â ±×·ì
+  int totalgroup=0;
+  int maxpages=5;
+  int startpage=1;
+  int endpage=startpage+maxpages-1;
+  int wheregroup=1;
 
-	//go : ÇØ´ç ÆäÀÌÁö ¹øÈ£·Î ÀÌµ¿
-	//gogroup : Ãâ·ÂÇÒ ÆäÀÌÁöÀÇ ±×·ìÇÎ
-	//freeboard_list.jsp?go=3
-	//freeboard_list.jsp?gogroup=2 (maxpage°¡ 5ÀÏ¶§ 6, 7, 8, 9, 10)
-	
-	//go º¯¼ö (ÆäÀÌÁö ¹øÈ£) ¸¦ ³Ñ°Ü¹Ş¾Æ¼­ wheregroup, startpage, endpage ÀÇ °ª ±¸ÇÏ±â
   if (request.getParameter("go") != null) {
    where = Integer.parseInt(request.getParameter("go"));
    wheregroup = (where-1)/maxpages + 1;
    startpage=(wheregroup-1) * maxpages+1;  
    endpage=startpage+maxpages-1; 
-   //gogroup º¯¼ö¸¦ ³Ñ°Ü¹Ş¾Æ¼­ startpage, endpage, where ÀÇ °ª ±¸ÇÔ
   } else if (request.getParameter("gogroup") != null) {
    wheregroup = Integer.parseInt(request.getParameter("gogroup"));
    startpage=(wheregroup-1) * maxpages+1;  
@@ -95,22 +88,12 @@
   int nextpage=where+1;
   int priorpage = where-1;
   int startrow=0;
-  int endrow=0;
-  int maxrows=5;			//Ãâ·ÂÇÒ ·¹ÄÚµå ¼ö 
+  int endrow=0;		//ì¶œë ¥í•  ë ˆì½”ë“œ ìˆ˜
+  int maxrows=20;
   int totalrows=0;
   int totalpages=0;
   
-  /*
-  out.println("================maxpage : 3 ÀÏ¶§ ==========="+"<p>");
-  out.println("ÇöÀç ÆäÀÌÁö : " + where+"<p>");
-  out.println("ÇöÀç ÆäÀÌÁö ±×·ì : " + wheregroup+"<p>");
-  out.println("½ÃÀÛ ÆäÀÌÁö : " + startpage+"<p>");
-  out.println("³¡ ÆäÀÌÁö : " + endpage+"<p>");
-  */
-  
-  // ÆäÀÌÂ¡ Ã³¸® ¸¶Áö¸· ºÎºĞ 
-  
-  
+  //í˜ì´ì§• ì²˜ë¦¬ ë§ˆì§€ë§‰ ë¶€ë¶„
 
   int id=0;
 
@@ -125,62 +108,38 @@
   String sql = "select * from freeboard order by" ;
   sql = sql + " masterid desc, replaynum, step, id" ;
   rs = st.executeQuery(sql);
-  
-  // out.println (sql); 
-  // if (true) return;    //ÇÁ·Î±×·¥ Á¾·á
 
+//  out.println(sql);
+//  if(true) return;
+  
   if (!(rs.next()))  {
-   out.println("°Ô½ÃÆÇ¿¡ ¿Ã¸° ±ÛÀÌ ¾ø½À´Ï´Ù");
+   out.println("ê²Œì‹œíŒì— ì˜¬ë¦° ê¸€ì´ ì—†ìŠµë‹ˆë‹¤");
   } else {
    do {
-	// rs ÀÇ id ÄÃ·³ÀÇ °ªÀ» °¡Á®¿Í¼­ Vector ¿¡ ÀúÀå
-	// ??... keyid, name, email µîÀÇ º¯¼ö´Â ¾îµğ¿¡¼­ ¼±¾ğµÈ °ÅÀÓ?
     keyid.addElement(new Integer(rs.getInt("id")));
-	
     name.addElement(rs.getString("name"));
     email.addElement(rs.getString("email"));
-    
-    // inputdate °ªÀ» °¡Á®¿ÂµÚ ¿øÇÏ´Â Çü½ÄÀ¸·Î ¼öÁ¤ÇÏ¿© ÀúÀå
-    // 22-05-12 12:12 ¿ÀÀü -> 22-05-22
     String idate = rs.getString("inputdate");
     idate = idate.substring(0,8);
     inputdate.addElement(idate);
-    
     subject.addElement(rs.getString("subject"));
     rcount.addElement(new Integer(rs.getInt("readcount")));
     step.addElement(new Integer(rs.getInt("step")));
-    
    }while(rs.next());
-   totalrows = name.size();	// name Vector¿¡ ÀúÀåµÈ ÀÎµ¦½º °¹¼ö = ÃÑ ·¹ÄÚµå ¼ö
+   totalrows = name.size();
    totalpages = (totalrows-1)/maxrows +1;
    startrow = (where-1) * maxrows;
-   endrow = startrow + maxrows-1  ;
-   
-   /*
-   out.println("========== maxrow : 3 ÀÏ¶§ ============="+ "<p>");
-   out.println("ÃÑ ·¹ÄÚµå ¼ö : " + totalrows + "<p>");
-   out.println("ÇöÀç ÆäÀÌÁö : " + where + "<p>");
-   out.println("½ÃÀÛ ·¹ÄÚµå : " + startrow + "<p>");
-   out.println("¸¶Áö¸· ·¹ÄÚµå : " + endrow + "<p>");
-   */
-   
+   endrow = startrow+maxrows-1  ;
    if (endrow >= totalrows)
     endrow=totalrows-1;
-   
-   totalgroup = (totalpages-1)/maxpages +1;	// ÆäÀÌÁöÀÇ ±×·ìÇÎ
-   
-   out.println("ÅäÅ» ÆäÀÌÁö ±×·ì : "+totalgroup +"<p>");
-   
+  
+   totalgroup = (totalpages-1)/maxpages +1;
    if (endpage > totalpages) 
     endpage=totalpages;
 
-   
-   // for ½ÃÀÛ
-   // ÇöÀç ÆäÀÌÁö¿¡¼­ ½ÃÀÛ ·¹ÄÚµå, ¸¶Áö¸· ·¹ÄÚµå ±îÁö ¼øÈ¯ÇÏ¸é¼­ Ãâ·Â
    for(int j=startrow;j<=endrow;j++) {
-    // .elementAt(1); : 1¹ø item À» °¡Á®¿Â´Ù.
-	String temp=(String)email.elementAt(j);
-    if ((temp == null) || (temp.equals("")) ) // ¸ŞÀÏ ÁÖ¼Ò°¡ ºñ¾úÀ» ¶§
+    String temp=(String)email.elementAt(j);
+    if ((temp == null) || (temp.equals("")) ) 
      em= (String)name.elementAt(j); 
     else
      em = "<A href=mailto:" + temp + ">" + name.elementAt(j) + "</A>";
@@ -219,16 +178,7 @@
     out.println("<TD align=center>");
     out.println(rcount.elementAt(j)+ "</TD>");
     out.println("</TR>"); 
-   /* 
-    out.println("J :"+ j +"<p>");
-    out.println("ID"+ keyid.elementAt(j)+"<p>");
-    out.println("subject : "+ subject +"<p>");
-    out.println("em : "+ em +"<p>");
-    if(true) return;
-    */
    }
-   // for ³¡
-   
    rs.close();
   }
   out.println("</TABLE>");
@@ -238,12 +188,12 @@
   out.println(e);
  } 
 
- if (wheregroup > 1) {	// ÇöÀç ³ªÀÇ ±×·ìÀÌ 1 ÃÊ°úÀÏ ¶§
-  out.println("[<A href=freeboard_list.jsp?gogroup=1>Ã³À½</A>]"); 
-  out.println("[<A href=freeboard_list.jsp?gogroup="+priorgroup +">ÀÌÀü</A>]");
- } else {	// ÇöÀç ³ªÀÇ ±×·ìÀÌ 1 ÀÌÇÏÀÏ ¶§
-  out.println("[Ã³À½]") ;
-  out.println("[ÀÌÀü]") ;
+ if (wheregroup > 1) {
+  out.println("[<A href=freeboard_list.jsp?gogroup=1>ì²˜ìŒ</A>]"); 
+  out.println("[<A href=freeboard_list.jsp?gogroup="+priorgroup +">ì´ì „</A>]");
+ } else {
+  out.println("[ì²˜ìŒ]") ;
+  out.println("[ì´ì „]") ;
  }
  if (name.size() !=0) { 
   for(int jj=startpage; jj<=endpage; jj++) {
@@ -254,13 +204,13 @@
    } 
   }
   if (wheregroup < totalgroup) {
-   out.println("[<A href=freeboard_list.jsp?gogroup="+ nextgroup+ ">´ÙÀ½</A>]");
-   out.println("[<A href=freeboard_list.jsp?gogroup="+ totalgroup + ">¸¶Áö¸·</A>]");
+   out.println("[<A href=freeboard_list.jsp?gogroup="+ nextgroup+ ">ë‹¤ìŒ</A>]");
+   out.println("[<A href=freeboard_list.jsp?gogroup="+ totalgroup + ">ë§ˆì§€ë§‰</A>]");
   } else {
-   out.println("[´ÙÀ½]");
-   out.println("[¸¶Áö¸·]");
+   out.println("[ë‹¤ìŒ]");
+   out.println("[ë§ˆì§€ë§‰]");
   }
-  out.println ("ÀüÃ¼ ±Û¼ö :"+totalrows); 
+  out.println ("ì „ì²´ ê¸€ìˆ˜ :"+totalrows); 
  %>
 <!--<TABLE border=0 width=600 cellpadding=0 cellspacing=0>
  <TR>
@@ -270,21 +220,18 @@
   </TR>
  </TABLE>-->
 
-
-<!--  °Ë»öÃ¢  -->
 <FORM method="post" name="msgsearch" action="freeboard_search.jsp">
-<!--  option À¸·Î °í¸¥ value °ª°ú input ¿¡ ³ÖÀº sval °ªÀÌ ³Ñ¾î°¨ -->
 <TABLE border=0 width=600 cellpadding=0 cellspacing=0>
  <TR>
   <TD align=right width="241"> 
    <SELECT name=stype >
-    <OPTION value=1 >ÀÌ¸§
-    <OPTION value=2 >Á¦¸ñ
-    <OPTION value=3 >³»¿ë
-    <OPTION value=4 >ÀÌ¸§+Á¦¸ñ
-    <OPTION value=5 >ÀÌ¸§+³»¿ë
-    <OPTION value=6 >Á¦¸ñ+³»¿ë
-    <OPTION value=7 >ÀÌ¸§+Á¦¸ñ+³»¿ë
+    <OPTION value=1 >ì´ë¦„
+    <OPTION value=2 >ì œëª©
+    <OPTION value=3 >ë‚´ìš©
+    <OPTION value=4 >ì´ë¦„+ì œëª©
+    <OPTION value=5 >ì´ë¦„+ë‚´ìš©
+    <OPTION value=6 >ì œëª©+ë‚´ìš©
+    <OPTION value=7 >ì´ë¦„+ì œëª©+ë‚´ìš©
    </SELECT>
   </TD>
   <TD width="127" align="center">

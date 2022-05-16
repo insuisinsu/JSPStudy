@@ -1,92 +1,98 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.*, java.util.*, java.text.*" %>
-<% request.setCharacterEncoding("UTF-8"); %>	<!--  í•œê¸€ ì²˜ë¦¬ -->
+<%@ page contentType="text/html; charset=EUC-KR" %>  
+<%@ page language="java" import="java.sql.*,java.util.*,java.text.*" %> 
+<% request.setCharacterEncoding("EUC-KR"); %>
+
 <%@ include file = "dbconn_oracle.jsp" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Form ì˜ ê°’ì„ ë°›ì•„ì„œ DB ì— ê°’ì„ ë„£ì–´ì¤Œ</title>
-</head>
-<body>
+
 <%
-	//í¼ì—ì„œ ë„˜ê¸´ ë³€ìˆ˜ë¥¼ ë°›ì•„ì„œ ì €ì¥
-	String na = request.getParameter("name");
-	String em = request.getParameter("email");
-	String sub = request.getParameter("subject");
-	String cont = request.getParameter("content");
-	String pw = request.getParameter("password");
-	
-	int id = 1;		// DBì˜ id ì»¬ëŸ¼ì— ì €ì¥í•  ê°’
-	int pos = 0;
-	if(cont.length() == 1){
-		cont = cont + " "; 
-	}
-	
-	//content(Text Area)ì˜ ì—”í„°ë¥¼ ì²˜ë¦¬í•´ ì¤˜ì•¼ í•¨ - Oracle DBì— ì €ì¥í• ë•Œ
-	while((pos = cont.indexOf("\'", pos)) != -1){
-		String left = cont.substring(0,pos);
-		String right = cont.substring(pos, cont.length());
-		cont = left + "\'" + right;
-		pos += 2;
-	}
-	
-	//ì˜¤ëŠ˜ì˜ ë‚ ì§œ ì²˜ë¦¬
-	java.util.Date yymmdd = new java.util.Date();
-	SimpleDateFormat myformat = new SimpleDateFormat("yy-mm-d h:mm a");
-	String ymd = myformat.format(yymmdd);
-	
-	String sql = null;
-	Statement st = null;
-	ResultSet rs = null;
-	int cnt = 0;			//insert ê°€ ì˜ ë˜ì—ˆëŠ”ì§€ í™•ì¸í•˜ëŠ” ë³€ìˆ˜
-	
-	try{
-		//ê°’ì„ ì €ì¥í•˜ê¸° ì „ì— ìµœì‹  ê¸€ë²ˆí˜¸(max(id))ë¥¼ ê°€ì ¸ì™€ì„œ +1 ì„ ì ìš©í•œë‹¤.
-		//conn(Connection) : Auto Commit; ì´ ì‘ë™ë¨
-			// commit ì„ ëª…ì‹œí•˜ì§€ ì•Šì•„ë„ Insert, Update, Delete í›„ì— ìë™ìœ¼ë¡œ ì»¤ë°‹ë¨
-		st = conn.createStatement();
-		sql = "select max(id) from freeboard";
-		rs = st.executeQuery(sql);
-		
-		if(!(rs.next())){	//!(rs.next()) .. rs.next() ê°€ false ë¼ë©´ (ë¹„ì—ˆë‹¤ë©´)
-			id = 1;
-		}else{				//rs.next() ê°€ true ë¼ë©´ (ê°’ì´ ìˆë‹¤ë©´)
-			id = rs.getInt(1) + 1;		//rs.getInt(1) -> max(id)
-		}
-		
-		
-		sql = "insert into freeboard (id, name, password, email, subject, ";
-		sql += "content, inputdate, masterid, readcount, replaynum, step) ";
-		sql += "values(" + id + ", '" + na +  "', '" + pw + "' , '" + em + "', ";
-		sql += "'" + sub + "', '" + cont + "', '" + ymd + "', " + id + ", ";
-		sql += "0, 0, 0)";
-		
-//		out.println(sql);
+ String na = request.getParameter("name");
+ String em = request.getParameter("email");
+ String sub = request.getParameter("subject"); 
+ String cont = request.getParameter("content");
+ String pw = request.getParameter("password");
+ int id =1;
+ int pos=0;
+ 
+ if (cont.length()==1) 
+  cont = cont+" "  ;
 
-		cnt = st.executeUpdate(sql);		// cnt > 0 ì´ë©´ insert ì„±ê³µ
+ // º»¹®¿¡ ÀÔ·ÂÇÑ ' °¡ Äõ¸®¿¡ ¿µÇâÀ» ÁÜ // insert, update ÇÒ¶§
+ while ((pos=cont.indexOf("\'", pos)) != -1) {
+  String left=cont.substring(0, pos);
+  	out.println("pos : " + pos + "<p>");
+  	out.println("left : " + left + "<p>");
+  
+  String right=cont.substring(pos, cont.length());
+  	out.println("pos : " + pos + "<p>");
+  	out.println("right : " + right + "<p>");
+  	
+  cont = left + "\'" + right;
+  pos += 2;
+ }
+ 
+ 
+// out.println (pos);
+// out.println (cont.length());
+// if (true) return;
+ 
+ java.util.Date yymmdd = new java.util.Date() ;
+ SimpleDateFormat myformat = new SimpleDateFormat("yy-MM-d h:mm a");
+ String ymd=myformat.format(yymmdd);
 
-		if(cnt > 0){
-			out.println("ë°ì´í„°ê°€ ì„±ê³µì ìœ¼ë¡œ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
-		}else{
-			out.println("ë°ì´í„°ê°€ ì…ë ¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
-		}
-		
-	}catch(Exception ex){
-		out.println(ex.getMessage());
-	}finally{
-		if(rs != null)
-			rs.close();
-		if(st != null)
-			st.close();
-		if(conn != null)
-			conn.close();
-	}
-		
+ String sql=null;
+ //Connection con=null;
+ Statement st=null; 
+ ResultSet rs=null;  
+ int cnt=0; 
+
+
+
+ try {
+
+  st = conn.createStatement();
+  sql = "select max(id) from  freeboard";	 //ÃÖ½Å±ÛÀÇ ¹øÈ£¸¦ °¡Á®¿Â´Ù. 
+  rs = st.executeQuery(sql);
+  if (!(rs.next())) 		//±ÛÀÌ Á¸ÀçÇÏÁö ¾Ê´Â °æ¿ì  
+   id=1;
+  else {
+   id= rs.getInt(1) + 1 ;  //±ÛÀÌÁ¸ÀçÇÏ´Â °æ¿ì ÃÖ´ë°ª¿¡ + 1	
+  
+  }       
+  sql= "insert into freeboard(id,name,password,email,subject," ;
+  sql= sql + "content,inputdate,masterid,readcount,replaynum,step)" ; 
+  sql= sql + " values(" +id + ", '" +  na + "','" + pw + "','"+ em  ;
+  sql= sql + "','" + sub + "','" + cont + "','" + ymd + "'," +id+"," ;
+  sql= sql + "0,0,0)";
+
+  cnt = st.executeUpdate(sql); 
+  
+if (cnt >0) 
+ out.println("µ¥ÀÌÅÍ°¡ ¼º°øÀûÀ¸·Î ÀÔ·ÂµÇ¾ú½À´Ï´Ù.");
+ else  
+  out.println("µ¥ÀÌÅÍ°¡ ÀÔ·ÂµÇÁö ¾Ê¾Ò½À´Ï´Ù. ");
+  
+ 
+ } catch (SQLException e) {
+  out.println(e);
+ }finally {
+	 if (rs != null)
+		 rs.close(); 
+	 if (st != null)
+		 st.close(); 
+	 if (conn != null)
+		 conn.close();
+ }
+ 
 %>
-	<jsp:forward page = "freeboard_list.jsp" />
+
+<jsp:forward page ="freeboard_list.jsp" />   
+
+<!--
+jsp:forward				: ¼­¹ö´Ü¿¡¼­ ÆäÀÌÁö¸¦ ÀÌµ¿ , client ÀÇ ±âÁ¸ url Á¤º¸°¡ ¹Ù²îÁö ¾ÊÀ½
+						- ±×·¡¼­ °Ô½Ã±Û ÀúÀåÇÏ°í list ·Î ¿Íµµ url Àº save ·Î µÇ¾îÀÖÀ½
+response.sendRedirect	: Å¬¶óÀÌ¾ğÆ®¿¡¼­ ÆäÀÌÁö¸¦ Àç¿äÃ»ÇÏ¿© ÆäÀÌÁö ÀÌµ¿ÇÔ , client ÀÇ url Á¤º¸°¡ ¹Ù²ñ
+ 						- freeboard_rsave.jsp ¿¡´Â ÀÌ°É·Î µÇ¾îÀÖÀ½
+ -->
 
 
-</body>
-</html>
+

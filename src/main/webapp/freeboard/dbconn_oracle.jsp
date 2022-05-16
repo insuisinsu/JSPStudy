@@ -1,25 +1,26 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.*" %>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+    
+ <%@ page import = "java.sql.*" %>   
+    
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta charset="EUC-KR">
 <title>Insert title here</title>
 </head>
 <body>
 
 <%
-	// ë³€ìˆ˜ ì´ˆê¸°í™”
-	Connection conn = null;		// DB ë¥¼ ì—°ê²°í•˜ëŠ” ê°ì²´ 
-	String driver = "oracle.jdbc.driver.OracleDriver";		// Oracle Driverì— ì ‘ì†
-	String url = "jdbc:oracle:thin:@localhost:1521:XE";
-
-	Class.forName (driver);		// ì˜¤ë¼í´ ë“œë¼ì´ë²„ ë¡œë“œí•¨
-	conn = DriverManager.getConnection (url, "hr2" , "1234");
+	//º¯¼ö ÃÊ±âÈ­ 
+	Connection conn = null;      //DB¸¦ ¿¬°áÇÏ´Â °´Ã¼ 
+	String driver = "oracle.jdbc.driver.OracleDriver";      //Oracle Driver¿¡ Á¢¼Ó 
+	String url = "jdbc:oracle:thin:@localhost:1521:XE"; 
+ 
+	Class.forName (driver) ; 		//¿À¶óÅ¬ µå¶óÀÌ¹ö ·ÎµåÇÔ. 
+	conn= DriverManager.getConnection (url, "hr", "hr");
 
 %>
-
 
 </body>
 </html>

@@ -18,7 +18,7 @@
 	String url = "jdbc:oracle:thin:@localhost:1521:XE"; 
  
 	Class.forName (driver) ; 		//오라클 드라이버 로드함. 
-	conn= DriverManager.getConnection (url, "hr2", "1234");
+	conn= DriverManager.getConnection (url, "hr", "hr");
 
 %>
 
